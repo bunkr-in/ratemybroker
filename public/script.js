@@ -53,7 +53,9 @@ function renderBrokerCards(brokers) {
 
         if (broker.phone) {
             const phoneEl = document.createElement('p');
-            phoneEl.innerHTML = `<span class="label">Phone:</span> ${broker.phone}`;
+            // Remove non-numeric characters from the phone number for the wa.me link
+            const numericPhoneNumber = broker.phone.replace(/\D/g, '');
+            phoneEl.innerHTML = `<span class="label">Phone:</span> <a href="https://wa.me/${numericPhoneNumber}" target="_blank" rel="noopener noreferrer">${broker.phone}</a>`;
             card.appendChild(phoneEl);
         }
 
