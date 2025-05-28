@@ -1,0 +1,108 @@
+/* CSS for Broker Ratings Website */
+
+:root {
+    --primary-blue: #0A2A4D; /* Deep blue for headers, prominent elements */
+    --secondary-blue: #1E6091; /* A slightly lighter, vibrant blue for accents or links */
+    --light-blue-bg: #F0F8FF; /* Very light blue for main background, e.g., AliceBlue */
+    --white: #FFFFFF;
+    --card-bg: var(--white);
+    --dark-text: #333333; /* For primary text on light backgrounds */
+    --medium-text: #555555; /* For secondary text */
+    --light-text: var(--white); /* For text on dark backgrounds */
+    --border-color: #DEE2E6; /* Light gray for borders */
+    --shadow-color: rgba(0, 0, 0, 0.08); /* Softer default shadow */
+    --hover-shadow-color: rgba(0, 0, 0, 0.12);
+    --rating-star-color: #FFC107; /* Gold for stars */
+    --footer-bg: #071E35; /* A very dark blue for footer */
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-blue-bg);
+    color: var(--dark-text);
+    padding-bottom: 70px; /* Add padding for fixed footer */
+    line-height: 1.6; /* Improved readability */
+}
+
+header {
+    background-color: var(--primary-blue);
+    color: var(--light-text);
+    padding: 1.5em 0; /* Slightly more padding */
+    text-align: center;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em; /* Slightly adjusted */
+    font-weight: 600; /* More modern weight */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 2.5em auto; /* More vertical margin */
+    padding: 2em; /* More internal padding */
+    background-color: var(--card-bg); /* White container on light blue background */
+    box-shadow: 0 5px 15px var(--shadow-color);
+    border-radius: 10px; /* Slightly more rounded */
+}
+
+.broker-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2em; /* Increased gap */
+}
+
+.broker-card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1.5em;
+    box-shadow: 0 3px 6px var(--shadow-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.broker-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px var(--hover-shadow-color);
+}
+
+.broker-card h2 {
+    margin-top: 0;
+    margin-bottom: 0.75em; /* Added margin bottom */
+    color: var(--primary-blue);
+    font-size: 1.6em; /* Adjusted size */
+    font-weight: 600;
+}
+
+.broker-card p {
+    margin: 0.6em 0; /* Adjusted margin */
+    color: var(--medium-text);
+    font-size: 0.95em; /* Slightly smaller for p elements */
+}
+
+.broker-card .label {
+    font-weight: 600; /* Semibold */
+    color: var(--dark-text);
+}
+
+.rating-stars {
+    color: var(--rating-star-color);
+    font-size: 1.1em; /* Slightly larger stars */
+}
+
+footer {
+    text-align: center;
+    padding: 1.2em 0; /* Adjusted padding */
+    background-color: var(--footer-bg);
+    color: var(--light-text);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure footer stays on top */
+    font-size: 0.9em;
+}
