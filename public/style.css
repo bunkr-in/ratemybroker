@@ -106,3 +106,13 @@ footer {
     z-index: 1000; /* Ensure footer stays on top */
     font-size: 0.9em;
 }
+
+footer a {
+    color: var(--rating-star-color); /* Gold color for visibility */
+    text-decoration: underline;
+}
+
+footer a:hover {
+    color: var(--light-text); /* White on hover */
+    text-decoration: none;
+}
