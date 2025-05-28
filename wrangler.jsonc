@@ -8,16 +8,7 @@
 	],
 	"assets": {
 		"directory": "./public"
-	},
-	"observability": {
-		"enabled": true
-	},
-	"durable_objects": {
-		"bindings": [
-			{ "name": "BROKER_STORE", "class_name": "BrokerDataStore" }
-		]
-	},
-	"migrations": [
-		{ "tag": "v1", "new_classes": ["BrokerDataStore"] }
-	]
+	}
 }
+
+

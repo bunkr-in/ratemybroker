@@ -11,26 +11,15 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-// Define the Env interface, including the Durable Object binding
+// Define the Env interface
 interface Env {
-	BROKER_STORE: DurableObjectNamespace;
 	// If you had other bindings (e.g., KV, R2, Services), they would go here.
 	// ASSETS is handled implicitly by the runtime when configured in wrangler.jsonc
 	// and doesn't typically appear in Env unless explicitly bound with a 'binding' name.
 }
 
-// Define the Durable Object class
-export class BrokerDataStore implements DurableObject {
-	// state: DurableObjectState; // No longer needed for storage
-	env: Env;
-	private brokerData: any[]; // Store broker data in memory
-
-	constructor(state: DurableObjectState, env: Env) {
-		// this.state = state; // No longer needed for storage
-		this.env = env;
-
-		// Hardcoded broker data (overallRating will be calculated on fetch)
-		this.brokerData = [
+// Hardcoded broker data (overallRating will be calculated on fetch)
+const brokerData: any[] = [
 			{
 				name: "Suresh",
 				organization: "Raj Properties",
@@ -142,34 +131,8 @@ export class BrokerDataStore implements DurableObject {
 				areaNiceness: 3,
 			}
 		];
-	}
 
-	async fetch(request: Request): Promise<Response> {
-		// const url = new URL(request.url); // Not strictly needed anymore for this logic
 
-		if (request.method === "GET") {
-			const brokersWithCalculatedRating = (this.brokerData || []).map(broker => {
-				const overallRating = (broker.responsiveness + broker.qualityOfHouses + broker.areaNiceness) / 3;
-				return {
-					...broker,
-					overallRating: parseFloat(overallRating.toFixed(2)) // Rounded to two decimal places
-				};
-			});
-
-			// Sort brokers by overallRating in descending order
-			const sortedBrokers = brokersWithCalculatedRating.sort((a, b) => b.overallRating - a.overallRating);
-
-			return new Response(JSON.stringify(sortedBrokers), {
-				headers: { 'Content-Type': 'application/json' },
-			});
-		} else if (request.method === "POST") {
-			// POST requests are no longer supported as data is hardcoded
-			return new Response('Method Not Allowed: Cannot add new brokers to hardcoded list.', { status: 405 });
-		} else {
-			return new Response('Method Not Allowed', { status: 405 });
-		}
-	}
-}
 
 export default {
 	async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -181,13 +144,25 @@ export default {
 			case '/random':
 				return new Response(crypto.randomUUID());
 			case '/api/brokers': {
-				// Get the Durable Object ID from a fixed name. This ensures you always
-				// get the same instance of the Durable Object for this purpose.
-				const id = env.BROKER_STORE.idFromName("allBrokers");
-				// Get the Durable Object stub.
-				const stub = env.BROKER_STORE.get(id);
-				// Forward the request to the Durable Object and return its response.
-				return stub.fetch(request);
+				if (request.method === "GET") {
+					const brokersWithCalculatedRating = (brokerData || []).map(broker => {
+						const overallRating = (broker.responsiveness + broker.qualityOfHouses + broker.areaNiceness) / 3;
+						return {
+							...broker,
+							overallRating: parseFloat(overallRating.toFixed(2)) // Rounded to two decimal places
+						};
+					});
+
+					// Sort brokers by overallRating in descending order
+					const sortedBrokers = brokersWithCalculatedRating.sort((a, b) => b.overallRating - a.overallRating);
+
+					return new Response(JSON.stringify(sortedBrokers), {
+						headers: { 'Content-Type': 'application/json' },
+					});
+				} else {
+					// For POST or any other method to /api/brokers
+					return new Response('Method Not Allowed: Cannot modify hardcoded list.', { status: 405 });
+				}
 			}
 			default:
 				// For requests that don't match an API route, Cloudflare Workers will
